@@ -1,0 +1,10 @@
+# Flask web framework and extensions
+Flask==3.0.0
+flask-cors==4.0.0
+
+# Google Generative AI (Gemini)
+google-generativeai==0.3.2
+
+# Environment configuration
+python-dotenv==1.0.0
+2
