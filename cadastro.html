@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="cadastro.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <a href="pginicial.html">
+                <img src="../imagens/goodwe.webp" alt="Logo da Goodwe">
+            </a>
+        </div>
+
+        <form id="formCadastro">
+            <!-- Informações Pessoais -->
+            <div class="info_pessoa">
+                <h3>Informações Pessoais</h3>
+                <div class="pessoa_item">
+                    <label>Nome Completo</label>
+                    <input type="text" placeholder="Digite seu nome" required>
+                </div>
+                <div class="pessoa_item">
+                    <label>Idade</label>
+                    <input type="number" placeholder="Digite sua idade" required>
+                </div>
+                <div class="pessoa_item">
+                    <label>Email</label>
+                    <input type="email" placeholder="exemplo@email.com" required>
+                </div>
+                <div class="pessoa_item">
+                    <label>CPF</label>
+                    <input type="text" placeholder="CPF" required>
+                </div>
+            </div>
+
+            <!-- Senhas -->
+            <div class="info_senha">
+                <h3>Segurança</h3>
+                <div class="senha_item">
+                    <label>Senha</label>
+                    <input type="password" placeholder="Digite sua senha" required>
+                    <ul class="senha-requisitos">
+                        <li id="req-min">Mínimo de 8 caracteres</li>
+                        <li id="req-letra">Deve conter letras (A-Z)</li>
+                        <li id="req-num">Deve conter números (0-9)</li>
+                        <li id="req-especial">Deve conter caracteres especiais (ex: @, #, !)</li>
+                    </ul>
+                </div>
+                <div class="senha_item">
+                    <label>Confirmar Senha</label>
+                    <input type="password" placeholder="Confirme sua senha" required>
+                </div>
+            </div>
+
+            <!-- Endereço -->
+            <div class="info_casa">
+                <h3>Endereço</h3>
+                <div class="casa_item">
+                    <label>CEP</label>
+                    <input type="text" placeholder="CEP" required>
+                </div>
+                <div class="casa_item">
+                    <label>Rua</label>
+                    <input type="text" placeholder="Digite sua rua" required>
+                </div>
+                <div class="casa_item">
+                    <label>Número</label>
+                    <input type="text" placeholder="Número da casa" required>
+                </div>
+                <div class="casa_item">
+                    <label>Complemento</label>
+                    <input type="text" placeholder="Apto, bloco, etc. (opcional)">
+                </div>
+                <div class="casa_item">
+                    <label>Cidade</label>
+                    <input type="text" placeholder="Digite sua cidade" required>
+                </div>
+                <div class="casa_item">
+                    <label>Estado</label>
+                    <input type="text" placeholder="Digite seu estado" required>
+                </div>
+            </div>
+
+            <button id="btnCadastrar" type="submit" disabled>Cadastrar</button>
+        </form>
+    </div>
+
+    <script src="cadastro.js"></script>
+</body>
+</html>

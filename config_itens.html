@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Configuração de Aparelhos</title>
+    <link rel="stylesheet" href="config_itens.css">
+</head>
+<body>
+    <div class="topo">
+        <div class="logo">
+            <a href="pginicial.html">
+                <img src="../imagens/goodwe.webp" alt="Logo da Goodwe">
+            </a>
+        </div>
+        <div class="cabecalho">
+            <div class="cabecalho_tema">Cadastro de Aparelhos</div>
+            <div class="cabecalho_itens">
+                <a href="consumo.html" class="cabecalho_item">Consumo</a>
+                <div class="cabecalho_item" id="btnAssistente">Assistente Virtual</div>
+                <div class="cabecalho_item" id="btnImportar">Importar</div>
+                <input type="file" id="inputImportar" accept="application/json" style="display:none;">
+                <div class="cabecalho_item" id="btnExportar">Exportar</div>
+                <div class="cabecalho_item" id="btnLimpar">Limpar</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="barra">
+        <div class="barra_item1">
+            <input type="text" placeholder="Buscar item..." class="campo_pesquisa" id="campoPesquisa">
+        </div>
+        <button class="botao_adicionar" id="botaoAdicionar">+ Adicionar Item</button>
+    </div>
+
+    <div class="area_selecao">
+        <div class="itens_de_selecao">Itens selecionados:</div>
+        <div class="grid_selecionados" id="gridSelecionados"></div>
+    </div>
+
+    <div class="barra_item2_interface" id="interfaceModal">
+        <div class="modal_conteudo">
+            <div class="grupo_classificacoes">
+                <button class="classificacao_dicionaveis" id="btnResidenciais">Aplicação Residenciais</button>
+                <button class="classificacao_dicionaveis" id="btnCI">Aplicação Comercial</button>
+                <button class="classificacao_dicionaveis" id="btnBaterias">Baterias</button>
+                <button class="classificacao_dicionaveis" id="btnMonitoramento">Monitoramento</button>
+                <button class="classificacao_dicionaveis" id="btnVeicular">Carregador Veiculares</button>
+                <button class="classificacao_dicionaveis" id="btnBIPV">BIPV</button>
+                <button class="classificacao_dicionaveis" id="btnSolo">Projetos no Solo</button>
+                <button class="classificacao_dicionaveis" id="btnArmazenamento">Armazenamento</button>
+            </div>
+
+            <!-- Listas de produtos -->
+            <div class="lista_adicionavel" id="listaResidenciais">
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/XS-G3.png"></div> 
+                    <span>XS G3 Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/DNS-G3.png"></div>
+                        <span>DNS G3 Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/DNS-G4.png">S</div> 
+                    <span>DNS G4 Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/MS-G3.png"></div> 
+                    <span>MS G3 Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/MS-G4.png"></div> 
+                    <span>MS G4 Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/MIS.png"></div> 
+                    <span>MIS Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/STDG3.1.png"></div> 
+                    <span>SDT G3.1 Series</span>
+                </div>
+            </div>
+            <div class="lista_adicionavel" id="listaCI">
+                 <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/SMTG2.png"></div> 
+                    <span>SMT G2 Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/GT.png"></div> 
+                    <span>GT Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/SDTG3.png"></div> 
+                    <span>SDT G3 Series (2 MPPTs)</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/SDTG33.png"></div> 
+                    <span>SDT G3 Series (3 MPPTs)</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/SDT34.png"></div> 
+                    <span>SDT G3 Series (4 MPPTs)</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/LVSMT.png"></div> 
+                    <span>LV-SMT Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/MT.png"></div> 
+                    <span>MT Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/HT.png"></div> 
+                    <span>HT Series</span>
+                </div>
+            </div>
+            <div class="lista_adicionavel" id="listaBaterias">
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/LynxhomeU.png"></div> 
+                    <span>Lynx Home U</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/lynxug3.png"></div> 
+                    <span>Lynx U G3</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/LynxAG3.png"></div> 
+                    <span>Lynx A G3</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/lynxfg2.png"></div> 
+                    <span>Lynx F G2</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/LynxC.png"></div> 
+                    <span>Lynx C</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/LYNXD.png"></div> 
+                    <span>Lynx D</span>
+                </div>
+            </div>
+            <div class="lista_adicionavel" id="listaMonitoramento">
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/sems.png"></div> 
+                    <span>SEMS+ Plataforma</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/medidorinteligenteresidencial.png"></div> 
+                    <span>Medidor GMK110</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/GM330-NOVO.png"></div> 
+                    <span>Medidor GM330</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/HK1000.png"></div> 
+                    <span>HomeKit 1000</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/wiikit.png"></div> 
+                    <span>Wi-Fi BOX / KIT</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/Ezlink.png"></div> 
+                    <span>EzLink</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/ezlogger.png"></div> 
+                    <span>DataLogger</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/SEC-1000.png"></div> 
+                    <span>SEC1000 / SEC1000S</span>
+                </div>
+            </div>
+            <div class="lista_adicionavel" id="listaVeicular">
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/HCA7.png"></div> 
+                    <span>GW7K-HCA</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/HCA11.png"></div> 
+                    <span>GW11K/22K-HCA</span>
+                </div>
+            </div>
+            <div class="lista_adicionavel" id="listaBIPV">
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/chanpinGalaxydierpingmu.png"></div> 
+                    <span>Galaxy Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/chanpinSunshinedierping.png"></div> 
+                    <span>Sunshine Series</span>
+                </div>
+                  <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/polaris.png"></div> 
+                    <span>Polaris Series</span>
+                </div>
+                  <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/chanpinStellardierping.png"></div> 
+                    <span>Stellar Series</span>
+                </div>
+            </div>
+            <div class="lista_adicionavel" id="listaSolo">
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/UT.png"></div> 
+                    <span>UT 250/320/350kW</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/HT.png"></div> 
+                    <span>HT 225/250kW</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/MVA3.5.png"></div> 
+                    <span>Estação 3.5/5/7MVA</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/MVA9.png"></div> 
+                    <span>Estação 9.152MVA</span>
+                </div>
+            </div>
+            <div class="lista_adicionavel" id="listaArmazenamento">
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/ESG2.png"></div> 
+                    <span>ES G2 Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/ET1230.png"></div> 
+                    <span>ET Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/ET50.png"></div> 
+                    <span>ET 50K Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/ETC.png"></div> 
+                    <span>ETC Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/SBPG2.png"></div> 
+                    <span>SBP G2 Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/BT.png"></div> 
+                    <span>BT Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/BTC.png"></div> 
+                    <span>BTC Series</span>
+                </div>
+                <div class="item_adicionavel1">
+                    <div class="imagens_itensadd"><img src="../imagens/STS.png"></div> 
+                    <span>STS Series</span>
+                </div>
+            </div>
+            <button id="fecharModal">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Nomeação de Item -->
+<div class="modal_nomeacao" id="modalNomeacao">
+  <div class="modal_nomeacao_conteudo">
+    <img id="imagemPreview" src="" alt="Imagem do item selecionado">
+    <input type="text" id="inputNomePersonalizado" placeholder="Digite um nome para este item">
+    <div class="slider_ativo botoes_nomeacao">
+      <label class="switch">
+        <input type="checkbox" class="sliderAtivo" id="sliderAtivo">
+        <span class="slider"></span>
+      </label>
+      <span class="statusTexto" id="statusTexto">Ativado</span>
+
+      <label class="switch">
+        <input type="checkbox" class="sliderPrioridade" id="sliderPrioridade">
+        <span class="slider"></span>
+      </label>
+      <span class="prioridadeTexto" id="prioridadeTexto">Prioritário</span>
+    </div>
+    <div>
+      <button id="btnAssistenteNomeacao">Assistente Virtual</button>
+    </div>
+    <div class="botoes_nomeacao">
+      <button id="confirmarNomeacao">Confirmar</button>
+      <button id="removerItemSelecionado">Remover</button>
+    </div>
+  </div>
+</div>
+
+    <!-- Chat Modal Assistente Virtual -->
+    <div class="chat-modal" id="chatModal">
+        <div class="chat-header">
+            Assistente Virtual
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <span id="btnLimparMemoria" style="cursor: pointer; font-size: 14px; opacity: 0.8;" title="Limpar memória da conversa">🧹</span>
+                <span class="chat-close" id="chatClose">&times;</span>
+            </div>
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Digite sua mensagem...">
+            <button id="chatSend">Enviar</button>
+        </div>
+    </div>
+    <script src="config_itens.js"></script>
+</body>
+</html>

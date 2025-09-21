@@ -1,0 +1,73 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Fundo vermelho da página */
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container branco */
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 40px 50px;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+/* Logo */
+.logo img {
+    max-width: 150px;
+    margin-bottom: 20px;
+}
+
+/* Cabeçalho */
+.cabecalho h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.cabecalho h4 {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Área de login */
+.login {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login_opcoes {
+    background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+    padding: 12px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.login_opcoes a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login_opcoes:hover {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}

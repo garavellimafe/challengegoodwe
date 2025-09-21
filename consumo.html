@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumo de Energia - GoodWe</title>
+    <link rel="stylesheet" href="consumo.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="topo">
+        <div class="logo">
+            <a href="pginicial.html">
+                <img src="imagens/goodwe.webp" alt="Logo da Goodwe">
+            </a>
+        </div>
+        <div class="cabecalho">
+            <div class="cabecalho_tema">Monitoramento de Consumo de Energia</div>
+            <div class="cabecalho_itens">
+                <a href="config_itens.html" class="cabecalho_item">Configurar Itens</a>
+                <div class="cabecalho_item" id="btnExportarRelatorio">Exportar Relatório</div>
+                <div class="cabecalho_item" id="btnConfiguracao">Configurações</div>
+                <div class="cabecalho_item" id="btnVoltar">Voltar</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container_principal">
+        <!-- Painel de Seleção de Dispositivos -->
+        <div class="painel_dispositivos">
+            <div class="titulo_secao">
+                <h3>Dispositivos GoodWe Disponíveis</h3>
+                <button class="btn_selecionar_todos" id="btnSelecionarTodos">Selecionar Todos</button>
+            </div>
+            
+            <div class="filtros">
+                <input type="text" placeholder="Buscar dispositivo..." class="campo_busca" id="campoBusca">
+                <select class="filtro_categoria" id="filtroCategoria">
+                    <option value="">Todas as Categorias</option>
+                    <option value="residencial">Residencial</option>
+                    <option value="comercial">Comercial</option>
+                    <option value="bateria">Baterias</option>
+                    <option value="monitoramento">Monitoramento</option>
+                    <option value="veicular">Carregadores</option>
+                </select>
+            </div>
+
+            <div class="grid_dispositivos" id="gridDispositivos">
+                <!-- Dispositivos serão carregados dinamicamente -->
+            </div>
+        </div>
+
+        <!-- Painel de Controle -->
+        <div class="painel_controle">
+            <div class="controles_simulacao">
+                <div class="titulo_secao">
+                    <h3>Parâmetros de Simulação</h3>
+                </div>
+                
+                <div class="grupo_controles">
+                    <div class="controle_item">
+                        <label for="horasUso">Horas de Uso Diário:</label>
+                        <input type="range" id="horasUso" min="1" max="24" value="8" class="slider">
+                        <span class="valor_slider" id="valorHoras">8h</span>
+                    </div>
+                    
+                    <div class="controle_item">
+                        <label for="diasMes">Dias por Mês:</label>
+                        <input type="range" id="diasMes" min="1" max="31" value="30" class="slider">
+                        <span class="valor_slider" id="valorDias">30 dias</span>
+                    </div>
+                    
+                    <div class="controle_item">
+                        <label for="tarifaEnergia">Tarifa (R$/kWh):</label>
+                        <input type="number" id="tarifaEnergia" value="0.75" step="0.01" min="0" class="input_tarifa">
+                    </div>
+                </div>
+
+                <div class="periodo_analise">
+                    <label for="periodoAnalise">Período de Análise:</label>
+                    <select id="periodoAnalise" class="select_periodo">
+                        <option value="diario">Diário</option>
+                        <option value="semanal">Semanal</option>
+                        <option value="mensal" selected>Mensal</option>
+                        <option value="anual">Anual</option>
+                    </select>
+                </div>
+
+                <button class="btn_calcular" id="btnCalcular">Calcular Consumo</button>
+            </div>
+
+            <!-- Resumo dos Dispositivos Selecionados -->
+            <div class="resumo_selecionados">
+                <div class="titulo_secao">
+                    <h3>Dispositivos Selecionados</h3>
+                    <span class="contador_selecionados" id="contadorSelecionados">0 dispositivos</span>
+                </div>
+                <div class="lista_selecionados" id="listaSelecionados">
+                    <p class="mensagem_vazia">Nenhum dispositivo selecionado</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Painel de Resultados -->
+        <div class="painel_resultados">
+            <div class="titulo_secao">
+                <h3>Resultados do Consumo</h3>
+                <div class="toggle_visualizacao">
+                    <button class="btn_toggle active" data-view="grafico">Gráfico</button>
+                    <button class="btn_toggle" data-view="tabela">Tabela</button>
+                </div>
+            </div>
+
+            <!-- Cards de Resumo -->
+            <div class="cards_resumo">
+                <div class="card_resumo">
+                    <div class="card_icone">⚡</div>
+                    <div class="card_conteudo">
+                        <div class="card_titulo">Consumo Total</div>
+                        <div class="card_valor" id="consumoTotal">0 kWh</div>
+                    </div>
+                </div>
+                
+                <div class="card_resumo">
+                    <div class="card_icone">💰</div>
+                    <div class="card_conteudo">
+                        <div class="card_titulo">Custo Estimado</div>
+                        <div class="card_valor" id="custoTotal">R$ 0,00</div>
+                    </div>
+                </div>
+                
+                <div class="card_resumo">
+                    <div class="card_icone">📊</div>
+                    <div class="card_conteudo">
+                        <div class="card_titulo">Maior Consumidor</div>
+                        <div class="card_valor" id="maiorConsumidor">-</div>
+                    </div>
+                </div>
+                
+                <div class="card_resumo">
+                    <div class="card_icone">🌱</div>
+                    <div class="card_conteudo">
+                        <div class="card_titulo">CO₂ Equivalente</div>
+                        <div class="card_valor" id="co2Equivalente">0 kg</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Área de Visualização -->
+            <div class="area_visualizacao">
+                <div class="visualizacao_grafico" id="visualizacaoGrafico">
+                    <canvas id="chartConsumo"></canvas>
+                </div>
+                
+                <div class="visualizacao_tabela" id="visualizacaoTabela" style="display: none;">
+                    <table class="tabela_resultados" id="tabelaResultados">
+                        <thead>
+                            <tr>
+                                <th>Dispositivo</th>
+                                <th>Potência (W)</th>
+                                <th>Horas/Dia</th>
+                                <th>Consumo Diário (kWh)</th>
+                                <th>Consumo Mensal (kWh)</th>
+                                <th>Custo Mensal (R$)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoTabela">
+                            <!-- Dados serão preenchidos dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Configuração -->
+    <div class="modal" id="modalConfiguracao">
+        <div class="modal_conteudo">
+            <div class="modal_cabecalho">
+                <h3>Configurações Avançadas</h3>
+                <button class="btn_fechar" id="btnFecharConfig">&times;</button>
+            </div>
+            <div class="modal_corpo">
+                <div class="config_grupo">
+                    <label for="eficienciaGeral">Eficiência Geral do Sistema (%):</label>
+                    <input type="range" id="eficienciaGeral" min="70" max="100" value="95" class="slider">
+                    <span class="valor_slider" id="valorEficiencia">95%</span>
+                </div>
+                
+                <div class="config_grupo">
+                    <label for="fatorPotencia">Fator de Potência:</label>
+                    <input type="number" id="fatorPotencia" value="0.95" step="0.01" min="0.7" max="1" class="input_config">
+                </div>
+                
+                <div class="config_grupo">
+                    <label for="perdaTransmissao">Perdas de Transmissão (%):</label>
+                    <input type="range" id="perdaTransmissao" min="0" max="15" value="5" class="slider">
+                    <span class="valor_slider" id="valorPerdas">5%</span>
+                </div>
+            </div>
+            <div class="modal_rodape">
+                <button class="btn_aplicar" id="btnAplicarConfig">Aplicar Configurações</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="consumo.js"></script>
+</body>
+</html>

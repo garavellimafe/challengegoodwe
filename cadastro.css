@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 450px;
+    width: 90%;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo img {
+    max-width: 120px;
+}
+
+/* Seções principais */
+.info_pessoa,
+.info_senha,
+.info_casa {
+    margin-bottom: 20px;
+}
+
+.info_pessoa h3,
+.info_senha h3,
+.info_casa h3 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 18px;
+    text-align: center;
+}
+
+/* Itens de formulário */
+.pessoa_item,
+.senha_item,
+.casa_item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+input {
+    padding: 14px;
+    border: 2px solid #e1e8ed;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+/* Requisitos da senha */
+.senha-requisitos {
+    display: none;
+    font-size: 0.9em;
+    margin-top: 4px;
+    padding-left: 20px;
+}
+
+.senha_item input:focus + .senha-requisitos {
+    display: block;
+}
+
+.senha-requisitos li {
+    margin-bottom: 4px;
+    color: gray;
+    transition: color 0.3s;
+}
+
+.senha-requisitos li.cumprido {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* Botão */
+button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: not-allowed;
+    background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+button:enabled {
+    cursor: pointer;
+    background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+}
+
+button:enabled:hover {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
