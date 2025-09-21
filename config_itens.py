@@ -221,6 +221,74 @@ def assistente():
         return jsonify({"erro": f"Erro interno do servidor: {str(e)}"}), 500
 
 
+# Variável global para armazenar itens selecionados
+itens_selecionados = []
+
+@app.route("/api/itens-selecionados", methods=["GET"])
+def get_itens_selecionados():
+    """Retorna os itens selecionados para serem usados na página de consumo"""
+    try:
+        return jsonify({"itens": itens_selecionados, "total": len(itens_selecionados)})
+    except Exception as e:
+        return jsonify({"erro": f"Erro ao buscar itens: {str(e)}"}), 500
+
+
+@app.route("/api/itens-selecionados", methods=["POST"])
+def save_itens_selecionados():
+    """Salva os itens selecionados vindos do frontend"""
+    global itens_selecionados
+    try:
+        dados = request.get_json() or {}
+        itens_selecionados = dados.get("itens", [])
+        
+        # Enriquece os dados com informações padrão para o consumo
+        for item in itens_selecionados:
+            if not item.get("potencia"):
+                # Define potências padrão baseadas no nome do dispositivo
+                nome = item.get("nome", "").lower()
+                if "dns" in nome or "ms" in nome:
+                    if "3" in nome:
+                        item["potencia"] = 3000
+                    elif "4" in nome:
+                        item["potencia"] = 4000
+                    elif "5" in nome:
+                        item["potencia"] = 5000
+                    else:
+                        item["potencia"] = 3000
+                elif "xs" in nome:
+                    item["potencia"] = 10000
+                elif "sdt" in nome:
+                    item["potencia"] = 25000
+                elif "lynx" in nome:
+                    if "home" in nome:
+                        item["potencia"] = 5000
+                    else:
+                        item["potencia"] = 15000
+                elif "bateria" in nome or "battery" in nome:
+                    item["potencia"] = 5000
+                else:
+                    item["potencia"] = 3000
+                    
+            # Adiciona categoria se não existir
+            if not item.get("categoria"):
+                nome = item.get("nome", "").lower()
+                if any(x in nome for x in ["dns", "ms", "lynx home"]):
+                    item["categoria"] = "residencial"
+                elif any(x in nome for x in ["xs", "sdt", "lynx"]):
+                    item["categoria"] = "comercial"
+                else:
+                    item["categoria"] = "residencial"
+                    
+            # Adiciona eficiência padrão
+            if not item.get("eficiencia"):
+                item["eficiencia"] = 97.5
+                
+        print(f"ITENS ▶ {len(itens_selecionados)} itens salvos para consumo")
+        return jsonify({"sucesso": True, "total": len(itens_selecionados)})
+    except Exception as e:
+        return jsonify({"erro": f"Erro ao salvar itens: {str(e)}"}), 500
+
+
 @app.route("/")
 def index():
     return send_from_directory(".", "config_itens.html")

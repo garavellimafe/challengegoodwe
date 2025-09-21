@@ -4,6 +4,36 @@ document.addEventListener("DOMContentLoaded", function () {
     const botaoAdicionar = document.getElementById("botaoAdicionar");
     const fecharModal = document.getElementById("fecharModal");
     const gridSelecionados = document.getElementById("gridSelecionados");
+    
+    // FUNÇÃO PARA SINCRONIZAR ITENS COM O BACKEND
+    async function syncItensComBackend() {
+        try {
+            const itens = Array.from(gridSelecionados.querySelectorAll(".item_selecionado")).map(item => {
+                const nome = item.querySelector("span")?.textContent || "";
+                const img = item.querySelector("img")?.getAttribute("src") || null;
+                const ativo = item.getAttribute("data-ativo") === "true";
+                const prioridade = item.getAttribute("data-prioridade") === "true";
+                return { nome, img, ativo, prioridade };
+            });
+            
+            const response = await fetch('/api/itens-selecionados', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ itens })
+            });
+            
+            if (response.ok) {
+                console.log(`✅ ${itens.length} itens sincronizados com o backend`);
+            } else {
+                console.error('❌ Erro ao sincronizar itens:', await response.text());
+            }
+        } catch (error) {
+            console.error('❌ Erro de conexão ao sincronizar itens:', error);
+        }
+    }
+    
      // FUNÇÃO PARA EXTRAIR ITENS DISPONÍVEIS DO MODAL
     function getItensDisponiveis() {
         const itens = [];
@@ -176,6 +206,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         novoItem.appendChild(switchContainer);
         gridSelecionados.appendChild(novoItem);
+        
+        // Sincroniza com o backend após adicionar item
+        syncItensComBackend();
     }
 
     // CLIQUE EM ITEM ADICIONÁVEL
@@ -304,6 +337,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (itemSelecionadoParaEdicao) {
             itemSelecionadoParaEdicao.remove();
             itemSelecionadoParaEdicao = null;
+            // Sincroniza com o backend após remover item
+            syncItensComBackend();
         }
         modalNomeacao.style.display = "none";
     });
@@ -312,6 +347,8 @@ document.addEventListener("DOMContentLoaded", function () {
     btnLimpar?.addEventListener("click", () => {
         gridSelecionados.innerHTML = "";
         campoPesquisa.value = "";
+        // Sincroniza com o backend após limpar todos
+        syncItensComBackend();
     });
 
     // BUSCA
@@ -411,6 +448,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (itemParaRemover) {
             itemParaRemover.remove();
             console.log(`Item "${nome}" removido.`);
+            // Sincroniza com o backend após remover item
+            syncItensComBackend();
             return true;
         } else {
             console.log(`Item "${nome}" não encontrado para remoção.`);

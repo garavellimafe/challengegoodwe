@@ -3,6 +3,7 @@ from flask_cors import CORS
 import json
 import datetime
 import math
+import requests
 
 app = Flask(__name__)
 CORS(app)
@@ -275,6 +276,45 @@ CONFIGURACOES_PADRAO = {
     'fator_co2': 0.0817      # kg CO2/kWh (média Brasil)
 }
 
+def obter_dispositivos_selecionados():
+    """
+    Busca os dispositivos selecionados da API do config_itens
+    Retorna os dispositivos no formato esperado pelo sistema de consumo
+    """
+    try:
+        response = requests.get('http://localhost:3080/api/itens-selecionados', timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            itens_selecionados = data.get('itens', [])
+            
+            # Converte os itens para o formato do DISPOSITIVOS_GOODWE
+            dispositivos_formatados = {}
+            for item in itens_selecionados:
+                # Usa o nome como chave, similar ao DISPOSITIVOS_GOODWE
+                dispositivo_id = item['nome']
+                dispositivos_formatados[dispositivo_id] = {
+                    'nome': item['nome'],
+                    'categoria': item.get('categoria', 'residencial'),
+                    'potencia_nominal': int(float(item.get('potencia', 3000))),  # Converte para W
+                    'potencia_maxima': int(float(item.get('potencia', 3000)) * 1.1),  # 10% acima do nominal
+                    'eficiencia': float(item.get('eficiencia', 97.0)),
+                    'tensao_entrada': '150-1000V',  # Valor padrão
+                    'corrente_maxima': 16,  # Valor padrão
+                    'imagem': item.get('imagem', 'default.png'),
+                    'fator_consumo': 0.8  # Fator padrão
+                }
+            
+            return dispositivos_formatados
+        else:
+            print(f"Erro ao buscar dispositivos do config_itens: {response.status_code}")
+            return DISPOSITIVOS_GOODWE  # Fallback para dados estáticos
+    except requests.exceptions.RequestException as e:
+        print(f"Erro de conexão com config_itens: {e}")
+        return DISPOSITIVOS_GOODWE  # Fallback para dados estáticos
+    except Exception as e:
+        print(f"Erro inesperado ao buscar dispositivos: {e}")
+        return DISPOSITIVOS_GOODWE  # Fallback para dados estáticos
+
 @app.route('/api/test', methods=['GET'])
 def test_api():
     """Endpoint para testar se a API está funcionando"""
@@ -286,10 +326,11 @@ def test_api():
 
 @app.route('/api/dispositivos', methods=['GET'])
 def listar_dispositivos():
-    """Retorna lista de todos os dispositivos disponíveis"""
+    """Retorna lista de dispositivos selecionados no config_itens ou todos os disponíveis"""
     categoria = request.args.get('categoria', None)
     
-    dispositivos = DISPOSITIVOS_GOODWE
+    # Primeiro tenta buscar dispositivos selecionados do config_itens
+    dispositivos = obter_dispositivos_selecionados()
     
     if categoria:
         dispositivos = {k: v for k, v in dispositivos.items() 
@@ -297,16 +338,20 @@ def listar_dispositivos():
     
     return jsonify({
         'dispositivos': dispositivos,
-        'total': len(dispositivos)
+        'total': len(dispositivos),
+        'source': 'config_itens' if dispositivos != DISPOSITIVOS_GOODWE else 'static'
     })
 
 @app.route('/api/dispositivo/<dispositivo_id>', methods=['GET'])
 def obter_dispositivo(dispositivo_id):
     """Retorna informações detalhadas de um dispositivo específico"""
-    if dispositivo_id not in DISPOSITIVOS_GOODWE:
+    # Busca primeiro nos dispositivos selecionados
+    dispositivos = obter_dispositivos_selecionados()
+    
+    if dispositivo_id not in dispositivos:
         return jsonify({'erro': 'Dispositivo não encontrado'}), 404
     
-    return jsonify(DISPOSITIVOS_GOODWE[dispositivo_id])
+    return jsonify(dispositivos[dispositivo_id])
 
 @app.route('/api/calcular-consumo', methods=['POST'])
 def calcular_consumo():
@@ -332,15 +377,18 @@ def calcular_consumo():
         perdas_transmissao = config.get('perdas_transmissao', 5.0) / 100
         fator_potencia = config.get('fator_potencia', 0.95)
         
+        # Busca dispositivos selecionados
+        dispositivos_disponiveis = obter_dispositivos_selecionados()
+        
         resultados = []
         consumo_total = 0
         custo_total = 0
         
         for dispositivo_id in dispositivos_ids:
-            if dispositivo_id not in DISPOSITIVOS_GOODWE:
+            if dispositivo_id not in dispositivos_disponiveis:
                 continue
                 
-            dispositivo = DISPOSITIVOS_GOODWE[dispositivo_id]
+            dispositivo = dispositivos_disponiveis[dispositivo_id]
             
             # Calcular potência real considerando eficiência e perdas
             potencia_nominal = dispositivo['potencia_nominal']  # W
@@ -443,13 +491,16 @@ def analise_eficiencia():
         if not dispositivos_ids:
             return jsonify({'erro': 'Nenhum dispositivo fornecido'}), 400
         
+        # Busca dispositivos selecionados
+        dispositivos_disponiveis = obter_dispositivos_selecionados()
+        
         analises = []
         
         for dispositivo_id in dispositivos_ids:
-            if dispositivo_id not in DISPOSITIVOS_GOODWE:
+            if dispositivo_id not in dispositivos_disponiveis:
                 continue
                 
-            dispositivo = DISPOSITIVOS_GOODWE[dispositivo_id]
+            dispositivo = dispositivos_disponiveis[dispositivo_id]
             
             # Classificação de eficiência
             eficiencia = dispositivo.get('eficiencia', 90.0)
@@ -548,17 +599,20 @@ def exportar_relatorio():
     try:
         dados = request.json
         
+        # Busca dispositivos atuais (selecionados ou padrão)
+        dispositivos_atuais = obter_dispositivos_selecionados()
+        
         # Incluir timestamp e metadados
         relatorio = {
             'metadata': {
                 'versao_api': '1.0',
                 'timestamp_geracao': datetime.datetime.now().isoformat(),
-                'total_dispositivos_disponiveis': len(DISPOSITIVOS_GOODWE)
+                'total_dispositivos_disponiveis': len(dispositivos_atuais)
             },
             'dados_solicitacao': dados,
             'configuracoes_sistema': CONFIGURACOES_PADRAO,
             'dispositivos_analisados': {
-                k: v for k, v in DISPOSITIVOS_GOODWE.items() 
+                k: v for k, v in dispositivos_atuais.items() 
                 if k in dados.get('dispositivos', [])
             }
         }
@@ -579,6 +633,7 @@ if __name__ == '__main__':
     print("   POST /api/analise-eficiencia")
     print("   GET/POST /api/configuracoes")
     print("   POST /api/exportar-relatorio")
-    print("⚡ Total de dispositivos: ", len(DISPOSITIVOS_GOODWE))
+    print("⚡ Dispositivos estáticos disponíveis: ", len(DISPOSITIVOS_GOODWE))
+    print("🔗 Integração com config_itens em: http://localhost:3080/api/itens-selecionados")
     
     app.run(debug=True, host='127.0.0.1', port=5000)
